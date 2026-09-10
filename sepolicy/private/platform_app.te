@@ -5,4 +5,4 @@ allow platform_app app_data_file:file { execute };
 allow platform_app vendor_file:file { read open getattr map execute };
 
 # Mark platform_app as vendor file executor
-typeattribute platform_app system_executes_vendor_violators
+typeattribute platform_app system_executes_vendor_violators;
