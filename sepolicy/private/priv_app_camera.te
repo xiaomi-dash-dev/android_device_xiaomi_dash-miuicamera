@@ -1,0 +1,36 @@
+# Camera app runs as priv_app (stock APK not signed with platform key)
+# Make priv_app permissive for camera to work during boot (before Magisk patches)
+permissive priv_app;
+
+# Allow camera app to call camera HAL via binder
+allow priv_app mtk_hal_camera:binder { call transfer };
+
+# Allow camera app to access dmabuf filesystem (shared memory for preview)
+allow priv_app unlabeled:filesystem { getattr };
+
+# Allow camera app to read CPU/memory/IO pressure info
+allow priv_app proc_pressure_cpu:file { read open getattr };
+allow priv_app proc_pressure_mem:file { read open getattr };
+allow priv_app proc_pressure_io:file { read open getattr };
+
+# Allow camera app to read thermal sensor (board_sensor_temp)
+allow priv_app sysfs_therm:file { read open getattr };
+
+# Allow camera app to read qemu hardware properties
+allow priv_app qemu_hw_prop:file { read };
+
+# Allow camera app to access vendor files
+allow priv_app vendor_file:file { read open getattr map execute };
+allow priv_app vendor_default_prop:file { getattr map open };
+allow priv_app vendor_fp_prop:file { getattr map open read };
+
+# Allow camera app to access audio config
+allow priv_app audio_config_prop:file { getattr map open read };
+allow priv_app cgroup:file { open read };
+
+# Allow camera app to find xiaomi camera hardware service
+allow priv_app default_android_hwservice:hwservice_manager { find };
+allow priv_app hal_xiaomi_camera_hwservice:hwservice_manager { find };
+
+# Allow camera app to execute app data
+allow priv_app app_data_file:file { execute };

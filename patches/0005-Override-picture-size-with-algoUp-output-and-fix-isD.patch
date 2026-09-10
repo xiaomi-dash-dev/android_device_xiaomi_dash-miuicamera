@@ -1,0 +1,51 @@
+From f4fd26039a47732c41cbaab90e7dd029cf44c7ed Mon Sep 17 00:00:00 2001
+From: therealmharc <therealmharc@gmail.com>
+Date: Thu, 10 Sep 2026 23:57:08 +0800
+Subject: [PATCH 05/10] Override picture size with algoUp output and fix
+ isDoingAction
+
+---
+ .../android/camera/module/Camera2Module.smali | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/smali/com/android/camera/module/Camera2Module.smali b/smali/com/android/camera/module/Camera2Module.smali
+index 487e692d..8925cffb 100644
+--- a/smali/com/android/camera/module/Camera2Module.smali
++++ b/smali/com/android/camera/module/Camera2Module.smali
+@@ -13939,6 +13939,19 @@
+     :goto_e
+     iget-object v1, v0, Lcom/android/camera/module/Camera2Module;->mLoadStreamSizeBase:LE5/p;
+ 
++    iget-object v2, v1, LE5/p;->B:Landroid/util/Size;
++
++    if-eqz v2, :skip_picture_override
++
++    iget-object v1, v1, LE5/p;->F:Ljava/util/HashMap;
++
++    sget-object v3, LE5/p$b;->a:LE5/p$b;
++
++    invoke-virtual {v1, v3, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    :skip_picture_override
++    iget-object v1, v0, Lcom/android/camera/module/Camera2Module;->mLoadStreamSizeBase:LE5/p;
++
+     iget-object v1, v1, LE5/p;->F:Ljava/util/HashMap;
+ 
+     invoke-direct {v0, v1}, Lcom/android/camera/module/Camera2Module;->updateSizeResult(Ljava/util/Map;)V
+@@ -22757,11 +22770,9 @@
+ .method public isDoingAction()Z
+     .locals 1
+ 
+-    invoke-super {p0}, Lcom/xiaomi/camera/module/PhotoBase;->isDoingAction()Z
+-
+-    move-result v0
++    const/4 v0, 0x0
+ 
+-    if-nez v0, :cond_1
++    return v0
+ 
+     iget-object p0, p0, Lcom/android/camera/module/Camera2Module;->mMultiCap:LE5/B;
+ 
+-- 
+2.55.0
+

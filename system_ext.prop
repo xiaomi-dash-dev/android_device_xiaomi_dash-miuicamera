@@ -1,4 +1,4 @@
 persist.vendor.camera.privapp.list=com.android.camera
 ro.com.google.lens.oem_camera_package=com.android.camera
-ro.product.mod_device=klee_global
+ro.product.mod_device=dash_global
 ro.miui.notch=1

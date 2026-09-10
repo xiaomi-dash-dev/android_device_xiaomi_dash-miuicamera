@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-MIUICAMERA_PATH := device/xiaomi/klee-miuicamera
+MIUICAMERA_PATH := device/xiaomi/dash-miuicamera
 CAMERA_PACKAGE_NAME := com.android.camera
 
 # Properties
@@ -18,4 +18,4 @@ BOARD_VENDOR_SEPOLICY_DIRS += $(MIUICAMERA_PATH)/sepolicy/vendor
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(MIUICAMERA_PATH)/sepolicy/private
 
 # Inherit from the proprietary version
-include vendor/xiaomi/klee-miuicamera/BoardConfigVendor.mk
+include vendor/xiaomi/dash-miuicamera/BoardConfigVendor.mk

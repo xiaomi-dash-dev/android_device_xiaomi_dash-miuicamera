@@ -3,3 +3,26 @@ app_domain(miuicamera_app)
 net_domain(miuicamera_app)
 
 permissive miuicamera_app;
+
+# Allow camera app to call camera HAL via binder
+allow miuicamera_app mtk_hal_camera:binder { call transfer };
+
+# Allow camera app to access dmabuf filesystem (shared memory for preview)
+allow miuicamera_app unlabeled:filesystem { getattr };
+
+# Allow camera app to read CPU/memory/IO pressure info
+allow miuicamera_app proc_pressure_cpu:file { read open getattr };
+allow miuicamera_app proc_pressure_mem:file { read open getattr };
+allow miuicamera_app proc_pressure_io:file { read open getattr };
+
+# Allow camera app to read thermal sensor (board_sensor_temp)
+allow miuicamera_app sysfs_therm:file { read open getattr };
+
+# Allow camera app to read qemu hardware properties (emulator compat)
+allow miuicamera_app qemu_hw_prop:file { read };
+
+# Allow camera app to access vendor default properties
+allow miuicamera_app vendor_default_prop:file { getattr map open };
+
+# Allow camera app to access vendor files
+allow miuicamera_app vendor_file:file { read open getattr map execute };

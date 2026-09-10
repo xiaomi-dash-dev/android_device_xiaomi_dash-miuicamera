@@ -1,0 +1,8 @@
+# Allow platform_app to execute app data files
+allow platform_app app_data_file:file { execute };
+
+# Allow platform_app to access vendor files
+allow platform_app vendor_file:file { read open getattr map execute };
+
+# Mark platform_app as vendor file executor
+typeattribute platform_app system_executes_vendor_violators

@@ -1,0 +1,2 @@
+# Allow audio HAL to read audio properties (needed for video recording audio)
+allow hal_audio_default audio_prop:file { read open getattr map };

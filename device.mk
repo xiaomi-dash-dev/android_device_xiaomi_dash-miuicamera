@@ -16,13 +16,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/miuicamera-hiddenapi-package-allowlist.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/sysconfig/miuicamera-hiddenapi-package-allowlist.xml
 
-# Init scripts
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init/init.miuicamera.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.miuicamera.rc
-
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
 
 # Inherit from the proprietary version
-$(call inherit-product, vendor/xiaomi/klee-miuicamera/klee-miuicamera-vendor.mk)
+$(call inherit-product, vendor/xiaomi/dash-miuicamera/dash-miuicamera-vendor.mk)

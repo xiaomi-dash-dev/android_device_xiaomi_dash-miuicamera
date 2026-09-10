@@ -1,1 +1,32 @@
 permissive mtk_hal_camera;
+
+# Allow camera HAL to read default properties
+allow mtk_hal_camera default_prop:file { read open getattr };
+
+# Allow camera HAL to read graphics config properties
+allow mtk_hal_camera graphics_config_prop:file { read open getattr map };
+allow mtk_hal_camera graphics_config_writable_prop:file { read open getattr };
+
+# Allow camera HAL to access dmabuf filesystem (shared memory)
+allow mtk_hal_camera unlabeled:filesystem { getattr };
+
+# Allow camera HAL to ioctl on graphics allocator shared memory
+allow mtk_hal_camera hal_graphics_allocator_default_tmpfs:file { ioctl };
+
+# Allow camera HAL to search system data directory
+allow mtk_hal_camera system_data_file:dir { search };
+
+# Allow camera HAL to control torch brightness
+allow mtk_hal_camera sysfs_therm:file { write };
+
+# Allow camera HAL binder callbacks to camera app
+allow mtk_hal_camera priv_app:binder { call transfer };
+
+# Allow camera HAL to read proc stat
+allow mtk_hal_camera proc_stat:file { open read };
+
+# Allow camera HAL to execute vendor files
+allow mtk_hal_camera mnt_vendor_file:file { execute };
+
+# Allow camera HAL to access miev device (MIUI event device for algo processing)
+allow mtk_hal_camera miev_dev:chr_file { open read write ioctl };

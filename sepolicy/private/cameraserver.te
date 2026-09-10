@@ -1,0 +1,2 @@
+# Allow cameraserver to access vendor files
+allow cameraserver vendor_file:file { getattr map open read execute };
