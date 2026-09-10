@@ -1,6 +1,9 @@
 # Camera app runs as priv_app (stock APK not signed with platform key)
 # Make priv_app permissive for camera to work during boot (before Magisk patches)
-permissive priv_app;
+# Only on userdebug/eng builds; user builds stay enforcing.
+userdebug_or_eng(`
+  permissive priv_app;
+')
 
 # Allow camera app to call camera HAL via binder
 allow priv_app mtk_hal_camera:binder { call transfer };

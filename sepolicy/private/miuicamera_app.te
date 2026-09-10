@@ -2,7 +2,9 @@ type miuicamera_app, domain, coredomain;
 app_domain(miuicamera_app)
 net_domain(miuicamera_app)
 
-permissive miuicamera_app;
+userdebug_or_eng(`
+  permissive miuicamera_app;
+')
 
 # Allow camera app to call camera HAL via binder
 allow miuicamera_app mtk_hal_camera:binder { call transfer };

@@ -1,4 +1,6 @@
-permissive mtk_hal_camera;
+userdebug_or_eng(`
+  permissive mtk_hal_camera;
+')
 
 # Allow camera HAL to read default properties
 allow mtk_hal_camera default_prop:file { read open getattr };
