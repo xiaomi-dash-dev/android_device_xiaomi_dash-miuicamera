@@ -1,2 +1,0 @@
-# Allow mediaserver to access vendor files
-allow mediaserver vendor_file:file { getattr map open read execute };

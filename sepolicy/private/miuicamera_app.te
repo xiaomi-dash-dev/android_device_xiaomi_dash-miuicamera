@@ -21,8 +21,6 @@ allow miuicamera_app proc_pressure_io:file { read open getattr };
 # Allow camera app to read qemu hardware properties (emulator compat)
 allow miuicamera_app qemu_hw_prop:file { read };
 
-# Allow camera app to access vendor default properties
-allow miuicamera_app vendor_default_prop:file { getattr map open };
-
-# Allow camera app to access vendor files
-allow miuicamera_app vendor_file:file { read open getattr map execute };
+# Allow camera app to execute native code from its private app data
+# (needed by modes like long exposure which load .so from data)
+allow miuicamera_app privapp_data_file:file { execute };

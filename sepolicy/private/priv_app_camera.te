@@ -19,16 +19,8 @@ allow priv_app proc_pressure_io:file { read open getattr };
 # Allow camera app to read qemu hardware properties
 allow priv_app qemu_hw_prop:file { read };
 
-# Allow camera app to access vendor files
-allow priv_app vendor_file:file { read open getattr map execute };
-allow priv_app vendor_default_prop:file { getattr map open };
-
 # Allow camera app to access audio config
 allow priv_app audio_config_prop:file { getattr map open read };
-allow priv_app cgroup:file { open read };
 
-# Allow camera app to find xiaomi camera hardware service
-allow priv_app default_android_hwservice:hwservice_manager { find };
-
-# Allow camera app to execute app data
-allow priv_app app_data_file:file { execute };
+# Allow camera app to execute native code from its private app data
+allow priv_app privapp_data_file:file { execute };
