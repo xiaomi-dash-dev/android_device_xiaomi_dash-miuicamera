@@ -18,6 +18,7 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
+    'device/xiaomi/dash',
     'device/xiaomi/dash-miuicamera',
     'vendor/xiaomi/dash'
 ]
