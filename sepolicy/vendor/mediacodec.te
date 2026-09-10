@@ -1,2 +1,2 @@
 # Allow mediacodec to access vendor audio properties
-allow mediacodec vendor_audio_prop:file { getattr map open read };
+allow mediacodec vendor_mtk_audio_prop:file { getattr map open read };

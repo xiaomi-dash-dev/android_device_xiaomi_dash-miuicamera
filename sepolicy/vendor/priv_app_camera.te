@@ -5,4 +5,4 @@ allow priv_app mtk_hal_camera:binder { call transfer };
 allow priv_app sysfs_therm:file { read open getattr };
 
 # Allow camera app to access vendor fingerprint properties
-allow priv_app vendor_fp_prop:file { getattr map open read };
+allow priv_app vendor_fingerprint_prop:file { getattr map open read };
