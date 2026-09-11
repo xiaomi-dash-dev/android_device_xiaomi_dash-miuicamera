@@ -10,8 +10,10 @@ userdebug_or_eng(`
 ')
 
 # HAL callbacks into the app process (preview frames, capture results).
+# miuicamera_app is a system_ext private type, invisible to vendor policy;
+# its side of this is the public hal_camera attribute via hal_client_domain()
+# in sepolicy/private/miuicamera_app.te.
 binder_call(mtk_hal_camera, priv_app)
-binder_call(mtk_hal_camera, miuicamera_app)
 
 # Tuning and config properties.
 get_prop(mtk_hal_camera, default_prop)
