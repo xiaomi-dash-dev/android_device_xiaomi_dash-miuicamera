@@ -1,0 +1,32 @@
+type miuicamera_app, domain, coredomain;
+
+app_domain(miuicamera_app)
+net_domain(miuicamera_app)
+
+# ROUND ONE: permissive on userdebug/eng only, so the app logs every denial
+# instead of malfunctioning on the first one. Collect them, write the allows,
+# then DELETE this block. User builds stay enforcing (compiles out) and green
+# in compat_test.
+userdebug_or_eng(`
+  permissive miuicamera_app;
+')
+
+# Standard camera path: the app talks to cameraserver, which owns the vendor
+# camera HAL, so no direct mtk_hal_camera binder is needed.
+allow miuicamera_app {
+    app_api_service
+    audioserver_service
+    cameraserver_service
+    mediaextractor_service
+    mediametrics_service
+    mediaserver_service
+}:service_manager find;
+
+dontaudit miuicamera_app radio_service:service_manager find;
+
+r_dir_file(miuicamera_app, vendor_camera_data_file)
+
+allow miuicamera_app privapp_data_file:file execute;
+
+get_prop(miuicamera_app, vendor_display_type_prop)
+get_prop(miuicamera_app, vendor_us_proximity_prop)

@@ -1,9 +1,0 @@
-# Extra camera modes dlopen .so extracted into the app data dir.
-allow platform_app app_data_file:file execute;
-
-# Vendor algorithm blobs mapped by the platform-signed camera build.
-allow platform_app vendor_file:file { getattr map open read execute };
-typeattribute platform_app system_executes_vendor_violators;
-
-# persist.vendor.camera.privapp.list.
-get_prop(platform_app, vendor_persist_camera_prop)
