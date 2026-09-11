@@ -1,0 +1,13 @@
+# Vendor-partition client rules for the MIUI camera app domain defined in
+# sepolicy/private/miuicamera_app.te. Vendor-defined service types are not
+# visible to private policy, so the finds live here.
+
+# Xiaomi MiSys + post-proc services the app binds to (see service_contexts).
+allow miuicamera_app misys_core_service:service_manager find;
+allow miuicamera_app misys_impl_service:service_manager find;
+allow miuicamera_app hal_misys_vendor_service:service_manager find;
+binder_call(miuicamera_app, misys_core)
+
+# Board temperature feedback while recording.
+allow miuicamera_app sysfs_therm:dir search;
+allow miuicamera_app sysfs_therm:file r_file_perms;

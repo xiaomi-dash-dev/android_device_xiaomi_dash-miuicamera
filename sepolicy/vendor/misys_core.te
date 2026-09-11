@@ -1,11 +1,16 @@
+# Xiaomi MiSys core daemon.
+# Own domain (not init), enforcing on all build types: only the allows below.
 type misys_core, domain;
 type misys_core_exec, exec_type, vendor_file_type, file_type;
 
-# Permissive only on userdebug/eng for debugging; user builds stay enforcing.
-# Unconditional `permissive` is rejected for user builds.
-userdebug_or_eng(`
-  permissive misys_core;
-')
-
 init_daemon_domain(misys_core)
-allow servicemanager misys_core:binder call;
+binder_use(misys_core)
+
+# Publishes the services labeled in service_contexts.
+add_service(misys_core, misys_core_service)
+add_service(misys_core, misys_impl_service)
+add_service(misys_core, hal_misys_vendor_service)
+
+# HardWareInfo stats a partition node to report the storage size.
+allow misys_core block_device:dir search;
+allow misys_core block_device:blk_file getattr;

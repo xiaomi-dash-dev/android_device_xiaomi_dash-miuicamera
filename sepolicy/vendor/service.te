@@ -1,3 +1,5 @@
-type misys_core_service, service_manager_type;
-type misys_impl_service, service_manager_type;
-type hal_misys_vendor_service, service_manager_type;
+# Each daemon-registered service gets a type of its own: AOSP forbids
+# domains from touching default_android_service.
+type misys_core_service, protected_service, hal_service_type, service_manager_type;
+type misys_impl_service, protected_service, hal_service_type, service_manager_type;
+type hal_misys_vendor_service, protected_service, hal_service_type, service_manager_type;
