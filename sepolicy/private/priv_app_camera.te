@@ -1,0 +1,30 @@
+# MIUI camera running as priv_app (APK not platform-signed: seapp_contexts
+# falls through to priv_app). Vendor-type rules live in
+# sepolicy/vendor/priv_app_camera.te.
+
+# ROUND ONE: permissive on userdebug/eng only. Covers every priv-app, so the
+# log is noisy by design — filter by app=com.android.camera. Collect, write
+# the allows, then DELETE this block. User builds stay enforcing and green.
+userdebug_or_eng(`
+  permissive priv_app;
+')
+
+# Finds the Xiaomi camera hardware service.
+allow priv_app default_android_hwservice:hwservice_manager find;
+
+# The algo threads statfs() the dmabuf filesystem, which carries no label.
+allow priv_app unlabeled:filesystem getattr;
+
+# Memory-pressure feedback for the capture pipeline.
+allow priv_app proc_pressure_cpu:file r_file_perms;
+allow priv_app proc_pressure_mem:file r_file_perms;
+allow priv_app proc_pressure_io:file r_file_perms;
+
+# Emulator compat (ro.kernel.qemu).
+get_prop(priv_app, qemu_hw_prop)
+
+# Audio tuning readback for video recording.
+get_prop(priv_app, audio_config_prop)
+
+# Extra camera modes dlopen .so extracted into the private data dir.
+allow priv_app privapp_data_file:file execute;

@@ -2,11 +2,18 @@ type miuicamera_app, domain, coredomain;
 app_domain(miuicamera_app)
 net_domain(miuicamera_app)
 
-# Enforcing on all build types: user builds reject permissive domains in
-# compat_test (29.0-34.0/202404_compat_test). app_domain + net_domain already
-# cover binder/hwbinder, camera, audio, media, graphics, network and storage.
+# ROUND ONE: permissive on userdebug/eng only, so the app logs every denial
+# instead of malfunctioning on the first one. Collect them, write the allows,
+# then DELETE this block. User builds stay enforcing (compiles out) and green
+# in compat_test.
+userdebug_or_eng(`
+  permissive miuicamera_app;
+')
+
+# app_domain + net_domain already cover binder/hwbinder, camera, audio,
+# media, graphics, network and storage.
 #
-# Vendor-partition rules for this domain (MiSys finds, thermal, …) live in
+# Vendor-partition rules for this domain live in
 # sepolicy/vendor/miuicamera_app.te; vendor types are not visible here.
 
 # Talks to the camera HAL (vendor declares mtk_hal_camera as hal_camera server).
@@ -21,7 +28,7 @@ allow miuicamera_app proc_pressure_mem:file r_file_perms;
 allow miuicamera_app proc_pressure_io:file r_file_perms;
 
 # Emulator compat (ro.kernel.qemu).
-allow miuicamera_app qemu_hw_prop:file read;
+get_prop(miuicamera_app, qemu_hw_prop)
 
 # Extra camera modes (e.g. long exposure) dlopen .so extracted here.
 allow miuicamera_app privapp_data_file:file execute;

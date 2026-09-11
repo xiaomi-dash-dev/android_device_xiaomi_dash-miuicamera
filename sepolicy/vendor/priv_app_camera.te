@@ -1,0 +1,12 @@
+# Vendor-partition rules for the camera running as priv_app (APK not
+# platform-signed). mtk_hal_camera and vendor prop types are only visible here.
+
+# Binds the MTK camera HAL directly (base module denial).
+binder_call(priv_app, mtk_hal_camera)
+
+# Board temperature feedback while recording.
+r_dir_file(priv_app, sysfs_therm)
+
+# Vendor fingerprint properties read at startup.
+# (base name vendor_fp_prop does not exist in-tree; renamed)
+get_prop(priv_app, vendor_fingerprint_prop)

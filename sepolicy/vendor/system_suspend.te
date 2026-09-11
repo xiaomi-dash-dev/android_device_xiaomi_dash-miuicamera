@@ -1,0 +1,2 @@
+# Suspend stats readback (base module denial).
+allow system_suspend sysfs:file { getattr open read };

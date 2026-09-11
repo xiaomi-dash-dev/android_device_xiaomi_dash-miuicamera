@@ -1,0 +1,3 @@
+# Codec reads vendor audio tuning.
+# (base name vendor_audio_prop does not exist in-tree; renamed)
+get_prop(mediacodec, vendor_mtk_audio_prop)

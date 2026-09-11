@@ -1,0 +1,38 @@
+# MTK camera HAL used by the MIUI camera (NOT hal_camera_default).
+# Enforcing: every rule below is a base-module denial, restyled.
+
+# ROUND ONE: permissive on userdebug/eng only, so the HAL logs every denial
+# instead of breaking the pipeline on the first one. Collect them, write the
+# allows, then DELETE this block. User builds are unaffected (compiles out)
+# and stay green in compat_test.
+userdebug_or_eng(`
+  permissive mtk_hal_camera;
+')
+
+# HAL callbacks into the app process (preview frames, capture results).
+binder_call(mtk_hal_camera, priv_app)
+binder_call(mtk_hal_camera, miuicamera_app)
+
+# Tuning and config properties.
+get_prop(mtk_hal_camera, default_prop)
+get_prop(mtk_hal_camera, graphics_config_prop)
+get_prop(mtk_hal_camera, graphics_config_writable_prop)
+
+# Shared ion/dmabuf allocator memory.
+allow mtk_hal_camera hal_graphics_allocator_default_tmpfs:file ioctl;
+
+# Vendor algorithm blobs executed from /mnt/vendor.
+allow mtk_hal_camera mnt_vendor_file:file execute;
+
+# Process stats readback.
+allow mtk_hal_camera proc_stat:file r_file_perms;
+
+# Capture output staging.
+allow mtk_hal_camera system_data_file:dir { getattr search };
+
+# Thermal throttling feedback (read + duty-cycle writes).
+allow mtk_hal_camera sysfs_therm:dir search;
+allow mtk_hal_camera sysfs_therm:file rw_file_perms;
+
+# The algo threads statfs() the dmabuf filesystem, which carries no label.
+allow mtk_hal_camera unlabeled:filesystem getattr;

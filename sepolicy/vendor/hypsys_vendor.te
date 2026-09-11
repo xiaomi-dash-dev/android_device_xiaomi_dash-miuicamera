@@ -1,11 +1,16 @@
 type hypsys_vendor, domain;
 type hypsys_vendor_exec, exec_type, vendor_file_type, file_type;
 
+# ROUND ONE: permissive on userdebug/eng only, so the daemon logs every
+# denial instead of dying on the first one. Collect them, write the allows,
+# then DELETE this block. User builds are unaffected (compiles out) and stay
+# green in compat_test.
+userdebug_or_eng(`
+  permissive hypsys_vendor;
+')
+
 init_daemon_domain(hypsys_vendor)
 binder_use(hypsys_vendor)
-
-# Talks to servicemanager at startup; a denied call aborts the daemon.
-allow hypsys_vendor servicemanager:binder { call transfer };
 
 # Persists state under /data/vendor (observed create/write/setattr).
 allow hypsys_vendor vendor_data_file:dir { create open getattr search setattr write };

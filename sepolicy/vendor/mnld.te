@@ -1,0 +1,6 @@
+# MTK location daemon. Enforcing; binder_use alone covers the
+# servicemanager handshake, no explicit binder line needed.
+binder_use(mnld)
+
+# Build properties read at startup (base module denial).
+get_prop(mnld, default_prop)

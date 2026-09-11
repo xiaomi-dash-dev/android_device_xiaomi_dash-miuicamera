@@ -3,6 +3,14 @@
 type misys_core, domain;
 type misys_core_exec, exec_type, vendor_file_type, file_type;
 
+# ROUND ONE: permissive on userdebug/eng only, so the daemon logs every
+# denial instead of dying on the first one. Collect them, write the allows,
+# then DELETE this block. User builds are unaffected (compiles out) and stay
+# green in compat_test.
+userdebug_or_eng(`
+  permissive misys_core;
+')
+
 init_daemon_domain(misys_core)
 binder_use(misys_core)
 
