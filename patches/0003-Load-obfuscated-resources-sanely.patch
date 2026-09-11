@@ -1,0 +1,63 @@
+From 0c1803f7d9016f4c43246a81c0d94ab5bc77ce25 Mon Sep 17 00:00:00 2001
+From: therealmharc <therealmharc@gmail.com>
+Date: Fri, 11 Sep 2026 22:43:26 +0800
+Subject: [PATCH 3/8] 0003: Load obfuscated resources sanely
+
+---
+ smali_classes2/Oe/a.smali | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/smali_classes2/Oe/a.smali b/smali_classes2/Oe/a.smali
+index 83d4743e..5c3d10ef 100644
+--- a/smali_classes2/Oe/a.smali
++++ b/smali_classes2/Oe/a.smali
+@@ -160,7 +160,7 @@
+ .end method
+ 
+ .method public static c(Landroid/content/res/Resources;ILjava/lang/Integer;)Landroid/graphics/drawable/Drawable;
+-    .locals 5
++    .locals 6
+ 
+     invoke-virtual {p0, p1}, Landroid/content/res/Resources;->getResourceTypeName(I)Ljava/lang/String;
+ 
+@@ -222,6 +222,8 @@
+     move p2, v2
+ 
+     :goto_0
++    move v5, p1
++
+     const/4 v3, 0x1
+ 
+     invoke-virtual {p0, p1, p2, v0, v3}, Landroid/content/res/Resources;->getValueForDensity(IILandroid/util/TypedValue;Z)V
+@@ -242,9 +244,12 @@
+ 
+     move-result-object p2
+ 
++    :try_start_9
+     invoke-virtual {p2, p1}, Landroid/content/res/AssetManager;->open(Ljava/lang/String;)Ljava/io/InputStream;
+ 
+     move-result-object p2
++    :try_end_9
++    .catch Ljava/io/FileNotFoundException; {:try_start_9 .. :try_end_9} :catch_9
+ 
+     :try_start_0
+     invoke-static {p2}, Lkotlin/jvm/internal/l;->c(Ljava/lang/Object;)V
+@@ -296,6 +301,15 @@
+ 
+     return-object p0
+ 
++    :catch_9
++    move-exception p2
++
++    invoke-virtual {p0, v5}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
++
++    move-result-object p0
++
++    return-object p0
++
+     :catchall_1
+     move-exception p0
+ 
+-- 
+2.55.0
+

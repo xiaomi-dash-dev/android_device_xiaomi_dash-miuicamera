@@ -1,4 +1,4 @@
-# Unpinned blobs from duchamp_global-user 15 AP3A.240905.015.A2 OS2.0.1.0.VNLMIXM release-keys
+# Unpinned blobs from missi-user 16 BP2A.250605.031.A3 OS3.0.302.0.WPLMIXM release-keys
 
 product/priv-app/MiuiCamera/MiuiCamera.apk:system_ext/priv-app/MiuiCamera/MiuiCamera.apk;OVERRIDES=Aperture
 system_ext/lib64/libcamera_algoup_jni.xiaomi.so
@@ -7,3 +7,38 @@ system_ext/lib64/libcamera_ispinterface_jni.xiaomi.so
 system_ext/lib64/libmtkisp_metadata_sys.so
 system_ext/lib64/vendor.mediatek.hardware.camera.isphal@1.0.so;MODULE_SUFFIX=-system_ext
 system_ext/lib64/vendor.mediatek.hardware.camera.isphal-V1-ndk.so;MODULE_SUFFIX=-system_ext
+
+# IMiSysImpl
+system_ext/etc/permissions/vendor.xiaomi.hardware.misys-V1.0-java-permission.xml
+system_ext/etc/permissions/vendor.xiaomi.hardware.misys-V2.0-java-permission.xml
+system_ext/etc/permissions/vendor.xiaomi.hardware.misys-V4.0-java-permission.xml
+system_ext/etc/permissions/vendor.xiaomi.hardware.misys.V3_0-permission.xml
+-system_ext/framework/vendor.xiaomi.hardware.aidlbgservice-V1-java.jar;MAKE_COPY_RULE_ONLY
+-system_ext/framework/vendor.xiaomi.hardware.bgservice-V1.0-java.jar
+-system_ext/framework/vendor.xiaomi.hardware.misys-V1.0-java.jar
+-system_ext/framework/vendor.xiaomi.hardware.misys-V2.0-java.jar
+-system_ext/framework/vendor.xiaomi.hardware.misys-V4.0-java.jar
+-system_ext/framework/vendor.xiaomi.hardware.misys.V3_0.jar
+-system_ext/framework/vendor.xiaomi.hardware.misys.common-V2-java.jar
+system_ext/lib/libmisys_jni.xiaomi.so
+system_ext/lib/libmqsas.so
+system_ext/lib/vendor.xiaomi.hardware.misys@1.0.so
+system_ext/lib/vendor.xiaomi.hardware.misys@3.0.so
+system_ext/lib64/libmisys_jni.xiaomi.so
+system_ext/lib64/libmqsas.so
+system_ext/lib64/miui.mqsas.native-cpp.so
+system_ext/lib64/vendor.xiaomi.hardware.aidlbgservice-V1-ndk.so;MODULE_SUFFIX=-system_ext
+system_ext/lib64/vendor.xiaomi.hardware.bgservice@1.0.so;MODULE_SUFFIX=-system_ext
+system_ext/lib64/vendor.xiaomi.hardware.misys.common-V3-ndk.so;MODULE_SUFFIX=-system_ext
+system_ext/lib64/vendor.xiaomi.hardware.misys.core-V1-ndk.so;MODULE_SUFFIX=-system_ext
+system_ext/lib64/vendor.xiaomi.hardware.misys@1.0.so
+system_ext/lib64/vendor.xiaomi.hardware.misys@3.0.so
+vendor/bin/hypsys_vendor
+vendor/bin/hw/vendor.xiaomi.hardware.misys.core-service
+vendor/etc/init/hypsys_vendor.rc
+vendor/etc/init/vendor.xiaomi.hardware.misys.core-service.rc
+-vendor/etc/vintf/manifest/manifest_mtkblackbox.xml
+-vendor/etc/vintf/manifest/vendor.xiaomi.hardware.misys.common.xml
+-vendor/etc/vintf/manifest/vendor.xiaomi.hardware.misys.core.xml
+vendor/lib64/vendor.xiaomi.hardware.misys.common-V3-ndk.so
+vendor/lib64/vendor.xiaomi.hardware.mtkblackbox-V3-ndk.so

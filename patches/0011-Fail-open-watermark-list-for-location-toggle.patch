@@ -1,0 +1,72 @@
+From 7f43ce8719ac8f66303c986549155c33f786b4a8 Mon Sep 17 00:00:00 2001
+From: therealmharc <therealmharc@gmail.com>
+Date: Sat, 12 Sep 2026 02:45:57 +0800
+Subject: [PATCH] 0011: Fail-open watermark list read so location toggle never
+ wedges
+
+---
+ smali_classes2/Gf/N.smali | 29 ++++-------------------------
+ 1 file changed, 4 insertions(+), 25 deletions(-)
+
+diff --git a/smali_classes2/Gf/N.smali b/smali_classes2/Gf/N.smali
+index 1607c5ac..7fdc4e6b 100644
+--- a/smali_classes2/Gf/N.smali
++++ b/smali_classes2/Gf/N.smali
+@@ -1183,7 +1183,7 @@
+     return-object p0
+ .end method
+ 
+-.method public final declared-synchronized h()Ljava/util/List;
++.method public final h()Ljava/util/List;
+     .locals 2
+     .annotation system Ldalvik/annotation/Signature;
+         value = {
+@@ -1194,9 +1194,6 @@
+         }
+     .end annotation
+ 
+-    monitor-enter p0
+-
+-    :try_start_0
+     const-string v0, "WmManager"
+ 
+     const-string v1, "getWaterMarkGroups: "
+@@ -1207,32 +1204,14 @@
+ 
+     if-nez v0, :cond_0
+ 
+-    invoke-virtual {p0}, LGf/N;->l()V
+-
+-    goto :goto_0
++    new-instance v0, Ljava/util/ArrayList;
+ 
+-    :catchall_0
+-    move-exception v0
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+ 
+-    goto :goto_1
++    return-object v0
+ 
+     :cond_0
+-    :goto_0
+-    sget-object v0, LGf/N;->b:Ljava/util/ArrayList;
+-    :try_end_0
+-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+-
+-    monitor-exit p0
+-
+     return-object v0
+-
+-    :goto_1
+-    :try_start_1
+-    monitor-exit p0
+-    :try_end_1
+-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+-
+-    throw v0
+ .end method
+ 
+ .method public final i(Ljava/lang/String;)Lcom/xiaomi/cam/watermark/b;
+-- 
+2.55.0
+

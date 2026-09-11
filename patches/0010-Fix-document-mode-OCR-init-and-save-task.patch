@@ -1,0 +1,64 @@
+From 2f12f58e0596df60b03b452225b81eebb72ead84 Mon Sep 17 00:00:00 2001
+From: therealmharc <therealmharc@gmail.com>
+Date: Sat, 12 Sep 2026 01:15:39 +0800
+Subject: [PATCH 2/2] 0010: Run OCR init on plain thread, force Doc save-task
+ when s0
+
+---
+ .gitignore                |  1 +
+ smali/z6/a.smali          | 13 +++++++++++++
+ smali_classes4/zi/F.smali |  6 +++++-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 00000000..567609b1
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1 @@
++build/
+diff --git a/smali/z6/a.smali b/smali/z6/a.smali
+index 4a6705b8..080260eb 100644
+--- a/smali/z6/a.smali
++++ b/smali/z6/a.smali
+@@ -160,6 +160,19 @@
+ 
+     invoke-static {p1, p0}, Lkotlin/jvm/internal/l;->f(Ljava/lang/Object;Ljava/lang/String;)V
+ 
++    sget-object v0, LQd/b$b;->a:LQd/b;
++
++    invoke-virtual {v0}, LQd/b;->s0()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_s0_orig
++
++    const/4 p0, 0x1
++
++    return p0
++
++    :cond_s0_orig
+     iget-object p0, p1, Lkg/q;->m:Lci/c;
+ 
+     instance-of v0, p0, Lci/f;
+diff --git a/smali_classes4/zi/F.smali b/smali_classes4/zi/F.smali
+index 0f1cdcfb..745b26f5 100644
+--- a/smali_classes4/zi/F.smali
++++ b/smali_classes4/zi/F.smali
+@@ -166,7 +166,11 @@
+ 
+     invoke-direct {v2, v3, p0, v1}, LLk/d;-><init>(ILjava/lang/Object;Ljava/lang/Object;)V
+ 
+-    invoke-static {v0, v2}, LEi/d;->t(Lio/reactivex/v;Ljava/lang/Runnable;)Lio/reactivex/disposables/b;
++    new-instance v0, Ljava/lang/Thread;
++
++    invoke-direct {v0, v2}, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable;)V
++
++    invoke-virtual {v0}, Ljava/lang/Thread;->start()V
+     :try_end_1
+     .catchall {:try_start_1 .. :try_end_1} :catchall_0
+ 
+-- 
+2.55.0
+
