@@ -9,8 +9,12 @@ userdebug_or_eng(`
   permissive priv_app;
 ')
 
-# Finds the Xiaomi camera hardware service.
-allow priv_app default_android_hwservice:hwservice_manager find;
+# NOTE: the base rule lists a `default_android_hwservice` find, but AOSP
+# domain.te neverallows every domain from finding the unlabeled HIDL
+# catch-all. The camera talks to the AIDL vendor.mediatek.hardware.camera.isphal
+# HAL, which is a service_manager lookup — if round one still logs a
+# hwservice_manager denial, label that specific service in a
+# vendor/hwservice_contexts and find its own type instead.
 
 # The algo threads statfs() the dmabuf filesystem, which carries no label.
 allow priv_app unlabeled:filesystem getattr;
