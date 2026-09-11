@@ -1,6 +1,23 @@
 type hypsys_vendor, domain;
 type hypsys_vendor_exec, exec_type, vendor_file_type, file_type;
 
-permissive hypsys_vendor;
+# NOTE: no `permissive` - enforcing user build; keep allows complete instead.
 
 init_daemon_domain(hypsys_vendor)
+
+# Daemon must talk to servicemanager at startup (denied call aborts it)
+allow hypsys_vendor servicemanager:binder { call transfer };
+
+# Daemon persists state under /data/vendor (observed open/write/setattr/create)
+allow hypsys_vendor vendor_data_file:dir { open getattr search write setattr create };
+allow hypsys_vendor vendor_data_file:file { open getattr read write setattr };
+
+# ChargerLogger paths (observed dir/file access, sysfs + bsp log + uevent)
+allow hypsys_vendor sysfs:file { open read getattr write };
+allow hypsys_vendor sysfs_batteryinfo:dir { search };
+allow hypsys_vendor sysfs_batteryinfo:file { open read getattr };
+allow hypsys_vendor sysfs_therm:dir { open getattr search };
+allow hypsys_vendor sysfs_therm:file { open read getattr };
+allow hypsys_vendor vendor_bsp_data_log_file:dir { search };
+allow hypsys_vendor vendor_bsp_data_log_file:file { open read getattr write setattr };
+allow hypsys_vendor hypsys_vendor:netlink_kobject_uevent_socket { read };

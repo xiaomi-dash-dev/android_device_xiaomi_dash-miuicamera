@@ -2,4 +2,27 @@ type miuicamera_app, domain, coredomain;
 app_domain(miuicamera_app)
 net_domain(miuicamera_app)
 
-permissive miuicamera_app;
+# Enforcing on all build types (no `permissive`): user builds reject
+# permissive domains in compat_test (29.0-34.0/202404_compat_test).
+# app_domain + net_domain already grant the baseline binder/hwbinder,
+# camera, audio, media, graphics, network and storage access.
+
+# Talk to the camera HAL (vendor declares mtk_hal_camera as hal_camera server)
+hal_client_domain(miuicamera_app, hal_camera)
+
+# Shared-memory preview buffers (dmabuf)
+allow miuicamera_app unlabeled:filesystem { getattr };
+
+# Pressure-stall info (/proc/pressure/* read by libjavacore)
+allow miuicamera_app proc_pressure_cpu:file { read open getattr };
+allow miuicamera_app proc_pressure_mem:file { read open getattr };
+allow miuicamera_app proc_pressure_io:file { read open getattr };
+
+# Emulator compat (ro.kernel.qemu)
+allow miuicamera_app qemu_hw_prop:file { read };
+
+# MIUI camera extracts .so (e.g. long exposure) into its data dir and dlopens it
+allow miuicamera_app privapp_data_file:file { execute };
+
+# persist.vendor.camera.privapp.list (same as priv_app/platform_app/cameraserver)
+get_prop(miuicamera_app, vendor_persist_camera_prop)
