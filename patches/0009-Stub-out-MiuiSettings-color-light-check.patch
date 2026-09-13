@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: dash-miuicamera
+Date: Sun, 14 Sep 2026 23:55:00 +0000
+Subject: [PATCH 9/9] Stub out MiuiSettings color-light check on AOSP
+
+Volume-key handling in timer mode reads
+MiuiSettings$System.light_camera_state, which does not exist on AOSP
+(NoClassDefFoundError -> RxJava undeliverable -> app crash). Default
+the strip-light state to false like the original default arg; the
+deco light path is meaningless off MIUI.
+---
+diff --git a/smali_classes4/Jh/a.smali b/smali_classes4/Jh/a.smali
+index 0000000..0000000 100644
+--- a/smali_classes4/Jh/a.smali
++++ b/smali_classes4/Jh/a.smali
+@@ -372,15 +372,10 @@
+ 
+     move-result v0
+ 
+-    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v1
+-
+-    const-string v3, "light_camera_state"
+-
+-    invoke-static {v1, v3, v2}, Landroid/provider/MiuiSettings$System;->getBoolean(Landroid/content/ContentResolver;Ljava/lang/String;Z)Z
+-
+-    move-result v1
++    # dash-miuicamera: MiuiSettings$System doesn't exist on AOSP
++    # (NoClassDefFoundError via volume-key path). The strip-light state is
++    # meaningless here; default it to false like the original default arg.
++    const/4 v1, 0x0
+ 
+     const/4 v3, 0x1
+ 

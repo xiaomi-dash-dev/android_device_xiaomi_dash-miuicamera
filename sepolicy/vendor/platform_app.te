@@ -1,19 +1,20 @@
 binder_use(platform_app)
 binder_call(platform_app, hal_camera_default)
 
-allow platform_app hal_aidlbgservice_service:service_manager find;
-
-allow platform_app adsprpcd_file:dir { open read search };
-
-allow platform_app vendor_camera_data_file:dir { append map r_dir_perms write };
-allow platform_app vendor_camera_data_file:file { getattr open read };
-
 allow platform_app app_data_file:file execute;
 
 # Properties
-get_prop(platform_app, vendor_audio_prop)
-get_prop(platform_app, vendor_camera_p3enable_prop)
-get_prop(platform_app, vendor_camera_sensor_prop)
-get_prop(platform_app, vendor_display_prop)
-get_prop(platform_app, vendor_displayfeature_prop)
 get_prop(platform_app, vendor_panel_info_prop)
+
+# MIUICamera (dash) AOSP port: the app may run as platform_app instead of
+# priv_app (upstream onyx/dash lineage adapts to this too). Mirror the
+# identity-dependent priv_app grants so capture works under either identity.
+# priv_app originals are kept - grants are additive, no conflicts.
+# Omitted mirrors (deliberate): sysfs_therm read (telemetry only),
+# vendor_default_prop read (coredomain neverallow), default_android_service
+# find (blanket neverallow), hal_camera_service find (use xiaomi_mivi_service).
+get_prop(platform_app, qemu_hw_prop)
+allow platform_app proc_pressure_mem:file r_file_perms;
+allow platform_app proc_pressure_cpu:file r_file_perms;
+allow platform_app proc_pressure_io:file r_file_perms;
+allow platform_app unlabeled:filesystem getattr;

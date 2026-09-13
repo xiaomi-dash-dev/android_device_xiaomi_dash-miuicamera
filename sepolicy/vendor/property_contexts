@@ -1,0 +1,9 @@
+# MIUICamera (dash) vendor property mappings.
+#
+# NOTE: persist.vendor.camera.privapp.list is more specific than the device
+# tree's persist.vendor.camera. prefix entry, so longest-match keeps it on
+# vendor_persist_camera_prop while the rest of the block stays on
+# vendor_mtk_camera_prop.
+
+# Device
+persist.vendor.camera.privapp.list         u:object_r:vendor_persist_camera_prop:s0

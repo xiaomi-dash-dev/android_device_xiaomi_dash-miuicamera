@@ -1,4 +1,4 @@
-From 0d666eb2aeae2da963f7bda4cf218f51aea71871 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: AdarshGrewal <adarshgrewal@gmail.com>
 Date: Wed, 3 Jun 2026 13:44:28 +0530
 Subject: [PATCH 1/7] Assume that mod_device is global Otherwise, the app tries
@@ -7,23 +7,26 @@ Subject: [PATCH 1/7] Assume that mod_device is global Otherwise, the app tries
 
 Change-Id: I8962a6e409f5aa30f84fccd482fefe78767069c2
 Signed-off-by: danielml <daniel@danielml.dev>
+
+Ported to MiuiCamera 6.3.006290.7 (dash, Stock-MiuiCamera/MiuiCamera.apk).
+Obfuscation/res names shifted vs the original APK; same runtime fix, new path.
+New path: smali_classes5/Lo/a.smali (was smali_classes4/G7/c.smali).
 ---
- smali_classes4/G7/c.smali | 2 +-
+smali_classes5/Lo/a.smali | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/smali_classes4/G7/c.smali b/smali_classes4/G7/c.smali
-index cc09a4e1..f4b9f4b1 100644
---- a/smali_classes4/G7/c.smali
-+++ b/smali_classes4/G7/c.smali
-@@ -233,7 +233,7 @@
+diff --git a/smali_classes5/Lo/a.smali b/smali_classes5/Lo/a.smali
+index 087824fa06e5df451bbadec11da1b77dad919c9f..38311312ec4f511226f48e5880fb60378416eab6 100644
+--- a/smali_classes5/Lo/a.smali
++++ b/smali_classes5/Lo/a.smali
+@@ -39,7 +39,7 @@
  
-     invoke-virtual {v0, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+     invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
  
 -    move-result v0
 +    const/4 v0, 0x1
  
-     sput-boolean v0, LG7/c;->m:Z
+     sput-boolean v0, LLo/a;->a:Z
  
 -- 
 2.54.0
-

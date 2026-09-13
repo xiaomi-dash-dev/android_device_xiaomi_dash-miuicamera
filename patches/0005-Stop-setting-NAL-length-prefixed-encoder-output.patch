@@ -1,25 +1,27 @@
-From 87baef7236191e5cdae959f6b22ee9abdf3d81f7 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: AdarshGrewal <adarshgrewal@gmail.com>
 Date: Sun, 7 Jun 2026 16:22:40 +0530
 Subject: [PATCH 5/7] Stop setting NAL length-prefixed encoder output
 
+Ported to MiuiCamera 6.3.006290.7 (dash, Stock-MiuiCamera/MiuiCamera.apk).
+Obfuscation/res names shifted vs the original APK; same runtime fix, new path.
+New path: smali_classes4/Wh/f.smali:855, LWh/s;->x:Z/:cond_1c (was smali_classes2/Hb/g.smali, LHb/r;->y:Z/:cond_17). Guards feature-nal-length-bitstream/nal-length-in-bytes/vendor.qti-ext-enc-nal-length-bs.num-bytes.
 ---
- smali_classes2/Hb/g.smali | 2 +-
+smali_classes4/Wh/f.smali | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/smali_classes2/Hb/g.smali b/smali_classes2/Hb/g.smali
-index 150a576f..d86991c1 100644
---- a/smali_classes2/Hb/g.smali
-+++ b/smali_classes2/Hb/g.smali
-@@ -713,7 +713,7 @@
+diff --git a/smali_classes4/Wh/f.smali b/smali_classes4/Wh/f.smali
+index 35664c9048c7d3be384909c0824db55ef66dc0be..be44679e0b38644b9b34d39274c5b00e41313997 100644
+--- a/smali_classes4/Wh/f.smali
++++ b/smali_classes4/Wh/f.smali
+@@ -852,7 +852,7 @@
  
-     iget-boolean v7, v4, LHb/r;->y:Z
+     iget-boolean v7, v3, LWh/s;->x:Z
  
--    if-eqz v7, :cond_17
-+    goto :cond_17
+-    if-eqz v7, :cond_1c
++    goto :cond_1c
  
-     iget v7, v4, LHb/r;->l:I
+     iget v7, v3, LWh/s;->l:I
  
 -- 
 2.54.0
-

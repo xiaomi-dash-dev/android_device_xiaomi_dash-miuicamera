@@ -1,0 +1,22 @@
+get_prop(priv_app, vendor_persist_camera_prop)
+
+# NOTE: hal_client_domain(priv_app, hal_camera) is DELIBERATELY NOT used here.
+# It adds priv_app to hal_camera_client, which nests into the hal_camera
+# attribute (proven: priv_app appears in typeattributeset hal_camera), and the
+# pre-existing broad allows (allow hal_camera video_device/camera_device
+# chr_file rw, plat + BSP hal_camera.te) then collide with the app.te
+# neverallows - recovery sepolicy fails only when this tree is included.
+# The Xiaomi bg-service find grant lives in vendor/miuicamera.te on a custom
+# service label instead (no neverallow can exist on a fresh type).
+
+# Hardware / system property reads (observed Enforcing denials)
+get_prop(priv_app, qemu_hw_prop)
+
+# Pressure-stall polling (board thermal read omitted: sysfs_therm is a
+# vendor-scope type, invisible to system_ext compiles)
+allow priv_app proc_pressure_mem:file r_file_perms;
+allow priv_app proc_pressure_cpu:file r_file_perms;
+allow priv_app proc_pressure_io:file r_file_perms;
+
+# dmabuf mount statfs during postproc buffer alloc
+allow priv_app unlabeled:filesystem getattr;

@@ -1,26 +1,29 @@
-From f194d1ea85a96dcf99bd952933a8be04bf64d296 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: AdarshGrewal <adarshgrewal@gmail.com>
 Date: Wed, 3 Jun 2026 14:00:15 +0530
 Subject: [PATCH 2/7] Remove Leica permissions limited popup
 
+Ported to MiuiCamera 6.3.006290.7 (dash, Stock-MiuiCamera/MiuiCamera.apk).
+Obfuscation/res names shifted vs the original APK; same runtime fix, new path.
+New path: smali/com/android/camera/a$c.smali, :pswitch_1 (obfuscated ActivityBase$c; was smali/com/android/camera/ActivityBase$c.smali).
 ---
- smali/com/android/camera/ActivityBase$c.smali | 3 ---
- 1 file changed, 3 deletions(-)
+smali/com/android/camera/a$c.smali | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/smali/com/android/camera/ActivityBase$c.smali b/smali/com/android/camera/ActivityBase$c.smali
-index 71436189..36618e24 100644
---- a/smali/com/android/camera/ActivityBase$c.smali
-+++ b/smali/com/android/camera/ActivityBase$c.smali
-@@ -79,9 +79,6 @@
+diff --git a/smali/com/android/camera/a$c.smali b/smali/com/android/camera/a$c.smali
+index b311f3e295515ed251eaa33d710148b9bcf59f9c..8ac32092449a3f38853fbb1be564893c91dc10d3 100644
+--- a/smali/com/android/camera/a$c.smali
++++ b/smali/com/android/camera/a$c.smali
+@@ -79,10 +79,6 @@
      goto/16 :goto_1
  
      :pswitch_1
--    const p1, 0x7f140af4
+-    const p1, 0x7f140aec
 -
--    invoke-static {p0, p1, v6}, LA/e4;->c(Landroid/content/Context;IZ)V
- 
+-    invoke-static {p0, p1, v5}, Lv1/g1;->b(Landroid/content/Context;IZ)V
+-
      goto/16 :goto_1
  
+     :pswitch_2
 -- 
 2.54.0
-

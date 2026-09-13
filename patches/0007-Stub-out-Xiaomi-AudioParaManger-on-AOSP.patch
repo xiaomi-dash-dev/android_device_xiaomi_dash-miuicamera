@@ -1,0 +1,93 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: therealmharc <therealmharc@t.me>
+Date: Sun, 13 Sep 2026 21:45:00 +0000
+Subject: [PATCH 8/8] Stub out Xiaomi AudioParaManger on AOSP
+
+android.media.AudioParaManger only exists on Xiaomi/HyperOS frameworks.
+On AOSP, VideoModule.initRecorder dies with NoClassDefFoundError and
+recording never initializes (initRecorder: success = false).
+Leave Ly1/a.a null and Wh/m.p null; both wrappers already null-guard
+their users (Ly1/a.c/g, Wh/u.h), so Ozo/audio-effects silently disable
+while normal MediaRecorder video keeps working.
+---
+smali/y1/a.smali          | 42 ------------------------------------------
+ smali_classes4/Wh/m.smali |  4 +---
+ 2 files changed, 1 insertion(+), 45 deletions(-)
+
+diff --git a/smali/y1/a.smali b/smali/y1/a.smali
+index 9035cc290760fe5859fc40e586b5e55c551e9f6b..72f86b108f3c27937331eff805f1e8ab20ba8eae 100644
+--- a/smali/y1/a.smali
++++ b/smali/y1/a.smali
+@@ -54,27 +54,6 @@
+     .line 6
+     iput-object v0, p0, Ly1/a;->a:Ljava/lang/Object;
+ 
+-    .line 7
+-    invoke-static {}, Ly1/a;->h()Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    invoke-static {}, Ls6/a;->e()Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_1
+-
+-    .line 8
+-    :cond_0
+-    new-instance v0, Landroid/media/AudioParaManger;
+-
+-    invoke-direct {v0, p2, p1}, Landroid/media/AudioParaManger;-><init>(Landroid/media/AudioRecord;Landroid/content/Context;)V
+-
+-    iput-object v0, p0, Ly1/a;->a:Ljava/lang/Object;
+-
+     :cond_1
+     return-void
+ .end method
+@@ -95,27 +74,6 @@
+     .line 2
+     iput-object v0, p0, Ly1/a;->a:Ljava/lang/Object;
+ 
+-    .line 3
+-    invoke-static {}, Ly1/a;->h()Z
+-
+-    move-result v0
+-
+-    if-nez v0, :cond_0
+-
+-    invoke-static {}, Ls6/a;->e()Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_1
+-
+-    .line 4
+-    :cond_0
+-    new-instance v0, Landroid/media/AudioParaManger;
+-
+-    invoke-direct {v0, p2, p1}, Landroid/media/AudioParaManger;-><init>(Landroid/media/MediaRecorder;Landroid/content/Context;)V
+-
+-    iput-object v0, p0, Ly1/a;->a:Ljava/lang/Object;
+-
+     :cond_1
+     return-void
+ .end method
+diff --git a/smali_classes4/Wh/m.smali b/smali_classes4/Wh/m.smali
+index 2549fa0be7193a3a2311c6435a34ccf2ce6954c8..8b2d869934a811de7c6c6fdaf9e2f061d43152cc 100644
+--- a/smali_classes4/Wh/m.smali
++++ b/smali_classes4/Wh/m.smali
+@@ -101,9 +101,7 @@
+ 
+     iput-object v1, v0, LWh/j;->w:LWh/r$b;
+ 
+-    new-instance v0, LWh/m$a;
+-
+-    invoke-direct {v0}, Ljava/lang/Object;-><init>()V
++    const/4 v0, 0x0
+ 
+     iput-object v0, p0, LWh/m;->p:Landroid/media/AudioParaManger$TuneListener;
+ 
+-- 
+2.54.0

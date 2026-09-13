@@ -1,0 +1,78 @@
+# MIUICamera (dash) - vendor-side grants for the AOSP port.
+#
+# On this platform the camera runs as priv_app and talks to mtk_hal_camera
+# (not hal_camera_default). Every rule below was proven live (Enforcing,
+# user build constraints) via the KernelSU module sepolicy.rule before
+# being ported here into build-time macro form.
+#
+# Deliberately NOT ported from the module (user-build neverallow breakers):
+# - allow priv_app vendor_default_prop:file read
+#     -> neverallow base_typeattr_234 (= coredomain): use the labeled
+#        vendor_mtk_camera_prop / vendor_persist_camera_prop instead.
+# - allow mtk_hal_camera default_prop:file read
+#     -> neverallow base_typeattr_232 (= non-coredomain): omitted, the HAL
+#        property poll falls back to defaults. Revisit only with the exact
+#        prop name + a labeled type if a feature proves to need it.
+# - allow priv_app default_android_service:service_manager find
+#     (IMiSysImpl lookup) -> blanket neverallow base_typeattr_242 (= all):
+#     the lookup failure is tolerated (no app logging, photo path proven
+#     without it). Proper fix needs a service_contexts label plus the
+#     provider's add grant once the provider domain is identified.
+# Deliberately NOT duplicated (already in device policy):
+# - allow mtk_hal_camera system_data_file:dir search
+# - mtk_hal_camera proc_pressure_mem access
+# - mtk_hal_camera sysfs_therm read (r_dir_file; write below is the addition)
+
+# priv_app <-> mtk_hal_camera binder IPC (preview/capture sessions, fd handoff)
+allow priv_app mtk_hal_camera:binder { call transfer };
+allow mtk_hal_camera priv_app:binder { call transfer };
+allow priv_app mtk_hal_camera:fd use;
+allow mtk_hal_camera priv_app:fd use;
+
+# platform_app mirror of the above (app identity may be platform_app;
+# priv_app originals kept, grants are additive). Binder app->hal was audited
+# neverallow-clean (no appdomain/hal binder neverallows in plat policy).
+allow platform_app mtk_hal_camera:binder { call transfer };
+allow mtk_hal_camera platform_app:binder { call transfer };
+allow platform_app mtk_hal_camera:fd use;
+allow mtk_hal_camera platform_app:fd use;
+
+# mtk_hal_camera graphics property reads (observed Enforcing denials)
+get_prop(mtk_hal_camera, graphics_config_prop)
+get_prop(mtk_hal_camera, graphics_config_writable_prop)
+
+# Xiaomi camera property block readers (persist.vendor.camera.*,
+# vendor.camera.* -> vendor_mtk_camera_prop in device policy, which ships
+# the label with zero reader grants). HAL reads OIS/dualcal/module keys.
+get_prop(mtk_hal_camera, vendor_mtk_camera_prop)
+
+# mtk_hal_camera torch_real_level write + board temp reads under sysfs_therm
+# (device policy grants read; write is the port addition)
+allow mtk_hal_camera sysfs_therm:file write;
+
+# mtk_hal_camera DMA_BUF_SYNC for full-res still post-processing.
+# Without the xperm, captures stall after quickview in Enforcing
+# (fires during photo post-processing, never for thumbnails).
+allow mtk_hal_camera hal_graphics_allocator_default_tmpfs:file ioctl;
+allowxperm mtk_hal_camera hal_graphics_allocator_default_tmpfs:file ioctl 0x6201;
+
+# mtk_hal_camera /dev/miev (AlgoFwk beauty/AI engine)
+allow mtk_hal_camera miev_dev:chr_file rw_file_perms;
+
+# mtk_hal_camera dmabuf mount statfs during full-res postproc buffer alloc
+allow mtk_hal_camera unlabeled:filesystem getattr;
+
+# Xiaomi MIVI bg-service lookup (the photo dispatch gate). AidlBGServiceClient
+# binds vendor.xiaomi.hardware.aidlbgservice.IBGService and PostProcServiceClient
+# binds vendor.xiaomi.hardware.postprocservice.IPostProcService; both are
+# labeled xiaomi_mivi_service (vendor/service_contexts + vendor/service.te).
+# Without find, getService returns null, miviBgServiceId stays 0 and full-res
+# frames never dispatch (thumbnail-only saves, zero denials). The label is
+# custom so no neverallow can cover it - hal_client_domain on hal_camera_service
+# is NOT an option (drags priv_app into hal_camera attr, trips video_device
+# neverallows). Provider is camerahalserver (mtk_hal_camera domain).
+allow priv_app xiaomi_mivi_service:service_manager find;
+allow mtk_hal_camera xiaomi_mivi_service:service_manager add;
+# platform_app mirror (same identity duality as above; fresh type, no
+# neverallow coverage possible).
+allow platform_app xiaomi_mivi_service:service_manager find;
